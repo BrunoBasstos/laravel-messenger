@@ -84,4 +84,52 @@ trait Messagable
                 $q->orWhere(Models::table('threads') . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . Models::table('participants') . '.last_read'));
             })->get();
     }
+
+    /**
+     * Returns the archived threads count for user.
+     *
+     * @return int
+     */
+    public function archivedThreadsCount()
+    {
+        return $this->archivedThreads()->count();
+    }
+
+    /**
+     * Returns all archived threads.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function archivedThreads()
+    {
+        return $this->threads()
+            ->where(function (Builder $q) {
+                $q->where(Models::table('participants') . '.archived', true);
+            })->get();
+    }
+
+    /**
+     * Returns the starred threads count for user.
+     *
+     * @return int
+     */
+    public function starredThreadsCount()
+    {
+        return $this->starredThreads()->count();
+    }
+
+    /**
+     * Returns all starred threads.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function starredThreads()
+    {
+        return $this->threads()
+            ->where(function (Builder $q) {
+                $q->where(Models::table('participants') . '.starred', true);
+            })->get();
+    }
+
+
 }
