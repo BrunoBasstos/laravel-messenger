@@ -131,5 +131,27 @@ trait Messagable
             })->get();
     }
 
+    /**
+     * Returns the trashed threads count for user.
+     *
+     * @return int
+     */
+    public function trashedThreadsCount()
+    {
+        return $this->trashedThreads()->count();
+    }
+
+    /**
+     * Returns all trashed threads.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function trashedThreads()
+    {
+        return $this->threads()
+            ->where(function (Builder $q) {
+                $q->whereNotNull(Models::table('participants') . '.deleted_at');
+            })->get();
+    }
 
 }
