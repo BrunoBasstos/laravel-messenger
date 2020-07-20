@@ -423,4 +423,86 @@ class Thread extends Eloquent
     {
         return $this->userUnreadMessages($userId)->count();
     }
+
+
+
+
+
+
+    /**
+     * Archive a thread for a user
+     *
+     * @param $userId
+     *
+     * @return void
+     */
+    public function archive($userId)
+    {
+        try {
+            $participant = $this->getParticipantFromUser($userId);
+            $participant->archived = true;
+            $participant->save();
+        } catch (ModelNotFoundException $e) { // @codeCoverageIgnore
+            // do nothing
+        }
+    }
+
+    /**
+     * Unarchive a thread for a user
+     *
+     * @param $userId
+     *
+     * @return void
+     */
+    public function unarchive($userId)
+    {
+        try {
+            $participant = $this->getParticipantFromUser($userId);
+            $participant->archived = false;
+            $participant->save();
+        } catch (ModelNotFoundException $e) { // @codeCoverageIgnore
+            // do nothing
+        }
+    }
+
+
+
+
+    /**
+     * Stars a thread for a user
+     *
+     * @param $userId
+     *
+     * @return void
+     */
+    public function star($userId)
+    {
+        try {
+            $participant = $this->getParticipantFromUser($userId);
+            $participant->starred = true;
+            $participant->save();
+        } catch (ModelNotFoundException $e) { // @codeCoverageIgnore
+            // do nothing
+        }
+    }
+
+    /**
+     * Unstars a thread for a user
+     *
+     * @param $userId
+     *
+     * @return void
+     */
+    public function unstar($userId)
+    {
+        try {
+            $participant = $this->getParticipantFromUser($userId);
+            $participant->starred = false;
+            $participant->save();
+        } catch (ModelNotFoundException $e) { // @codeCoverageIgnore
+            // do nothing
+        }
+    }
+
+
 }
