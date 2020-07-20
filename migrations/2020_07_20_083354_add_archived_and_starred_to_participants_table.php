@@ -15,8 +15,8 @@ class AddArchivedAndStarredToParticipantsTable extends Migration
     public function up()
     {
         Schema::table(Models::table('participants'), function (Blueprint $table) {
-            $table->boolean('archived');
-            $table->boolean('starred');
+            $table->boolean('archived')->default(false);
+            $table->boolean('starred')->default(false);
         });
     }
 
