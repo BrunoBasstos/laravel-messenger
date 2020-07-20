@@ -169,6 +169,7 @@ class Thread extends Eloquent
         return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
             ->where($participantsTable . '.user_id', $userId)
             ->whereNull($participantsTable . '.deleted_at')
+            ->where($participantsTable . '.archived', false)
             ->select($threadsTable . '.*');
     }
 
@@ -188,6 +189,7 @@ class Thread extends Eloquent
         return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->whereNull($participantTable . '.deleted_at')
+            ->where($participantTable . '.archived', false)
             ->where(function (Builder $query) use ($participantTable, $threadsTable) {
                 $query->where($threadsTable . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $participantTable . '.last_read'))
                     ->orWhereNull($participantTable . '.last_read');
@@ -424,11 +426,6 @@ class Thread extends Eloquent
         return $this->userUnreadMessages($userId)->count();
     }
 
-
-
-
-
-
     /**
      * Archive a thread for a user
      *
@@ -464,9 +461,6 @@ class Thread extends Eloquent
             // do nothing
         }
     }
-
-
-
 
     /**
      * Stars a thread for a user
